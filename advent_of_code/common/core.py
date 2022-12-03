@@ -4,6 +4,8 @@ from typing import Callable, TypeVar, Union, overload
 from entrypoint import entrypoint
 from typing_extensions import Literal
 
+from advent_of_code.common.timer import create_timer
+
 __all__ = ("source_path", "solution")
 
 D = TypeVar("D")
@@ -32,6 +34,11 @@ def source_path(path: str, suffix: str = SOURCE_SUFFIX) -> Path:
 
 ONLY = False
 
+SOURCE = "read source in `{}`"
+SOLVED_ONLY = "solved in `{}`"
+SOLVED_ONE = "solved part one in `{}`"
+SOLVED_TWO = "solved part two in `{}`"
+
 
 @overload
 def solution(name: str, path: str, only: Literal[False] = ...) -> SolveBoth[D, T]:
@@ -48,10 +55,18 @@ def solution(name: str, path: str, only: bool = ONLY) -> SolveAny[D, T]:
         def solve_only(parse: Parse[D], solve_only: Solve[D, T]) -> None:
             @entrypoint(name)
             def _() -> None:
+                timer = create_timer()
+
                 with source_path(path).open() as file:
                     data = parse(file.read())
 
+                print(SOURCE.format(timer.elapsed()))
+
+                timer = timer.reset()
+
                 print(solve_only(data))
+
+                print(SOLVED_ONLY.format(timer.elapsed()))
 
         return solve_only
 
@@ -61,10 +76,23 @@ def solution(name: str, path: str, only: bool = ONLY) -> SolveAny[D, T]:
         ) -> None:
             @entrypoint(name)
             def _() -> None:
+                timer = create_timer()
+
                 with source_path(path).open() as file:
                     data = parse(file.read())
 
+                print(SOURCE.format(timer.elapsed()))
+
+                timer = timer.reset()
+
                 print(solve_part_one(data))
+
+                print(SOLVED_ONE.format(timer.elapsed()))
+
+                timer = timer.reset()
+
                 print(solve_part_two(data))
+
+                print(SOLVED_TWO.format(timer.elapsed()))
 
         return solve_both
