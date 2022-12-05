@@ -1,5 +1,5 @@
 from functools import partial
-from typing import DefaultDict, List, Sequence, TypeVar
+from typing import Dict, List, Sequence, TypeVar
 
 from attrs import define, field, frozen
 from iters import iter
@@ -49,9 +49,7 @@ class Stack:
         return type(self)(self.boxes)
 
 
-Stacks = DefaultDict[str, Stack]
-
-default_stack_dict = partial(DefaultDict[str, Stack], Stack)
+Stacks = Dict[str, Stack]
 
 
 E = TypeVar("E", bound="Executor")
@@ -59,13 +57,11 @@ E = TypeVar("E", bound="Executor")
 
 @frozen()
 class Executor:
-    stacks: Stacks = field(factory=default_stack_dict)
+    stacks: Stacks = field(factory=dict)
     moves: Moves = field(factory=list)
 
     def clone(self: E) -> E:
-        stacks = default_stack_dict()
-
-        stacks.update({name: stack.clone() for name, stack in self.stacks.items()})
+        stacks = {name: stack.clone() for name, stack in self.stacks.items()}
 
         return type(self)(stacks, self.moves)
 
@@ -153,13 +149,16 @@ LAST = ~0
 
 
 def parse(source: str) -> Executor:
-    state_string, moves_string = split_double_new_line(source.strip())
+    state_string, moves_string = split_double_new_line(source.rstrip())
 
     *lines, names_string = split_new_line(state_string)
 
     names = names_string.split()
 
-    stacks = default_stack_dict()
+    stacks = {}
+
+    for name in names:
+        stacks[name] = Stack()
 
     partial_parse_boxes = partial(parse_boxes, stacks, names)
 
