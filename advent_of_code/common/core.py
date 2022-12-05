@@ -52,6 +52,7 @@ def solution(name: str, path: str, only: Literal[True]) -> SolveOnly[D, T]:
 
 def solution(name: str, path: str, only: bool = ONLY) -> SolveAny[D, T]:
     if only:
+
         def solve_only(parse: Parse[D], solve_only: Solve[D, T]) -> None:
             @entrypoint(name)
             def _() -> None:
@@ -71,6 +72,7 @@ def solution(name: str, path: str, only: bool = ONLY) -> SolveAny[D, T]:
         return solve_only
 
     else:
+
         def solve_both(
             parse: Parse[D], solve_part_one: Solve[D, T], solve_part_two: Solve[D, T]
         ) -> None:

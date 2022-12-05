@@ -148,6 +148,7 @@ def parse_boxes(stacks: Stacks, names: Names, line: str) -> None:
 
                 index += 1
 
+
 LAST = ~0
 
 
