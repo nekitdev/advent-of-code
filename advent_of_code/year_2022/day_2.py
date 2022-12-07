@@ -4,7 +4,7 @@ from typing import List, Tuple
 from iters import iter
 from iters.utils import unpack_binary
 
-from advent_of_code.common import solution
+from advent_of_code.common import solution, split_lines
 
 A = "A"
 B = "B"
@@ -13,8 +13,6 @@ C = "C"
 X = "X"
 Y = "Y"
 Z = "Z"
-
-NEW_LINE = "\n"
 
 
 class Choice(Enum):
@@ -68,10 +66,6 @@ def compute_choice_score(computer_choice: Choice, result: Result) -> int:
     return compute_choice(computer_choice, result).value + result.value
 
 
-def split_new_line(source: str) -> List[str]:
-    return source.split(NEW_LINE)
-
-
 def parse_section(string: str) -> Tuple[str, str]:
     left, right = string.split()
 
@@ -79,7 +73,7 @@ def parse_section(string: str) -> Tuple[str, str]:
 
 
 def parse(source: str) -> List[Tuple[str, str]]:
-    return iter(split_new_line(source.strip())).map(parse_section).list()
+    return iter(split_lines(source.strip())).map(parse_section).list()
 
 
 def get_choices(item: Tuple[str, str]) -> Tuple[Choice, Choice]:

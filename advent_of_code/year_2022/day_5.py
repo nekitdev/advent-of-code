@@ -3,9 +3,9 @@ from typing import Dict, List, Sequence, TypeVar
 
 from attrs import define, field, frozen
 from iters import iter
-from parse import Parser
+from parse import Parser  # type: ignore
 
-from advent_of_code.common import solution
+from advent_of_code.common import solution, split_double_lines, split_lines
 
 MOVE = "move {count:d} from {source_name} to {destination_name}"
 BOX = "[{name}]"
@@ -87,17 +87,7 @@ class Executor:
             source.boxes = source.boxes[count:]
 
 
-NEW_LINE = "\n"
-DOUBLE_NEW_LINE = NEW_LINE + NEW_LINE
 SPACE = " "
-
-
-def split_new_line(string: str) -> List[str]:
-    return string.split(NEW_LINE)
-
-
-def split_double_new_line(string: str) -> List[str]:
-    return string.split(DOUBLE_NEW_LINE)
 
 
 def split_space(string: str) -> List[str]:
@@ -149,9 +139,9 @@ LAST = ~0
 
 
 def parse(source: str) -> Executor:
-    state_string, moves_string = split_double_new_line(source.rstrip())
+    state_string, moves_string = split_double_lines(source.rstrip())
 
-    *lines, names_string = split_new_line(state_string)
+    *lines, names_string = split_lines(state_string)
 
     names = names_string.split()
 
@@ -164,7 +154,7 @@ def parse(source: str) -> Executor:
 
     iter(lines).for_each(partial_parse_boxes)
 
-    moves = iter(split_new_line(moves_string)).map(parse_move).list()
+    moves = iter(split_lines(moves_string)).map(parse_move).list()
 
     return Executor(stacks, moves)
 

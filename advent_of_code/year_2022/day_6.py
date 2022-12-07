@@ -1,11 +1,9 @@
-from functools import partial
-from typing import Set, TypeVar
+from typing import Sized
 
 from iters import iter
 
-from advent_of_code.common import solution
+from advent_of_code.common import Predicate, solution
 
-T = TypeVar("T")
 
 START_OF_PACKET_COUNT = 4
 START_OF_MESSAGE_COUNT = 14
@@ -15,14 +13,15 @@ def parse(source: str) -> str:
     return source
 
 
-def is_start_of(count: int, data: Set[str]) -> bool:
-    return len(data) == count
+def is_start_of(count: int) -> Predicate[Sized]:
+    def predicate(data: Sized) -> bool:
+        return len(data) == count
+
+    return predicate
 
 
 def find_count(count: int, data: str) -> int:
-    is_start = partial(is_start_of, count)
-
-    return iter(data).set_windows(count).position(is_start) + count
+    return iter(data).set_windows(count).position(is_start_of(count)) + count
 
 
 def solve_part_one(data: str) -> int:

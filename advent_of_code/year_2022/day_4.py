@@ -7,7 +7,7 @@ from iters import iter
 from iters.utils import unpack_binary
 from orderings import LenientOrdered
 
-from advent_of_code.common import solution
+from advent_of_code.common import solution, split_lines
 
 T = TypeVar("T", bound=LenientOrdered)
 
@@ -37,13 +37,6 @@ def check_overlaps(left: Range[T], right: Range[T]) -> bool:
     return left.overlaps(right)
 
 
-NEW_LINE = "\n"
-
-
-def split_new_line(string: str) -> List[str]:
-    return string.split(NEW_LINE)
-
-
 COMMA = ","
 DASH = "-"
 
@@ -58,7 +51,7 @@ def parse_ranges(string: str) -> Ranges[int]:
 
 
 def parse(source: str) -> List[Ranges[int]]:
-    return iter(split_new_line(source.strip())).map(parse_ranges).list()
+    return iter(split_lines(source.strip())).map(parse_ranges).list()
 
 
 def solve_part_one(data: List[Ranges[int]]) -> int:

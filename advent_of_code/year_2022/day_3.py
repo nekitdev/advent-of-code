@@ -3,12 +3,10 @@ from typing import List, Tuple
 from iters import iter
 from iters.utils import unpack_binary, unpack_ternary
 
-from advent_of_code.common import solution
-
-NEW_LINE = "\n"
+from advent_of_code.common import solution, split_lines
 
 PRIORITY_LINE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-PRIORITY = {letter: priority for priority, letter in enumerate(PRIORITY_LINE, 1)}
+PRIORITY = {letter: priority for priority, letter in iter(PRIORITY_LINE).enumerate_from(1).unwrap()}
 
 
 def priority(letter: str) -> int:
@@ -21,12 +19,8 @@ def divide(string: str) -> Tuple[str, str]:
     return (string[:middle], string[middle:])
 
 
-def split_new_line(string: str) -> List[str]:
-    return string.split(NEW_LINE)
-
-
 def parse(source: str) -> List[str]:
-    return split_new_line(source.strip())
+    return split_lines(source.strip())
 
 
 def find_item_priority(left: str, right: str) -> int:

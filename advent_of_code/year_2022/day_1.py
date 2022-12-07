@@ -2,19 +2,7 @@ from typing import List
 
 from iters import iter
 
-from advent_of_code.common import solution
-
-NEW_LINE = "\n"
-
-DOUBLE_NEW_LINE = NEW_LINE + NEW_LINE
-
-
-def split_new_line(string: str) -> List[str]:
-    return string.split(NEW_LINE)
-
-
-def split_double_new_line(string: str) -> List[str]:
-    return string.split(DOUBLE_NEW_LINE)
+from advent_of_code.common import solution, split_double_lines, split_lines
 
 
 def parse_section(section: List[str]) -> int:
@@ -22,7 +10,7 @@ def parse_section(section: List[str]) -> int:
 
 
 def parse(source: str) -> List[int]:
-    return iter(split_double_new_line(source.strip())).map(split_new_line).map(parse_section).list()
+    return iter(split_double_lines(source.strip())).map(split_lines).map(parse_section).list()
 
 
 def solve_part_one(data: List[int]) -> int:

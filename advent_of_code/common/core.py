@@ -1,22 +1,16 @@
 from pathlib import Path
-from typing import Callable, TypeVar, Union, overload
+from typing import TypeVar, Union, overload
 
 from entrypoint import entrypoint
 from typing_extensions import Literal
 
 from advent_of_code.common.timer import create_timer
+from advent_of_code.common.typing import Binary, Ternary, Unary
 
 __all__ = ("source_path", "solution")
 
 D = TypeVar("D")
 T = TypeVar("T")
-U = TypeVar("U")
-V = TypeVar("V")
-R = TypeVar("R")
-
-Unary = Callable[[T], R]
-Binary = Callable[[T, U], R]
-Ternary = Callable[[T, U, V], R]
 
 Parse = Unary[str, D]
 Solve = Unary[D, T]
