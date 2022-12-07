@@ -1,16 +1,12 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from typing import Callable, Iterator, List, Optional, Sequence, TypeVar, Union
+from typing import Iterator, List, Optional, Sequence, TypeVar, Union
 
 from attrs import field, frozen
 from typing_extensions import Literal, TypeGuard
 
-from advent_of_code.common import solution, split_lines
-
-T = TypeVar("T")
-
-Predicate = Callable[[T], bool]
+from advent_of_code.common import Predicate, solution, split_lines
 
 CAN_NOT_FIND = "can not find `{}`"
 
@@ -70,6 +66,8 @@ LS = "ls"
 
 
 FIRST = 0
+
+T = TypeVar("T")
 
 
 def first(sequence: Sequence[T]) -> T:
