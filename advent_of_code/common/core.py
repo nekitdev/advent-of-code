@@ -11,13 +11,14 @@ __all__ = ("source_path", "solution")
 
 D = TypeVar("D")
 T = TypeVar("T")
+U = TypeVar("U")
 
 Parse = Unary[str, D]
 Solve = Unary[D, T]
 
 SolveOnly = Binary[Parse[D], Solve[D, T], None]
-SolveBoth = Ternary[Parse[D], Solve[D, T], Solve[D, T], None]
-SolveAny = Union[SolveOnly[D, T], SolveBoth[D, T]]
+SolveBoth = Ternary[Parse[D], Solve[D, T], Solve[D, U], None]
+SolveAny = Union[SolveOnly[D, T], SolveBoth[D, T, U]]
 
 SOURCE_SUFFIX = ".in"
 
@@ -35,7 +36,7 @@ SOLVED_TWO = "solved part two in `{}`"
 
 
 @overload
-def solution(name: str, path: str, only: Literal[False] = ...) -> SolveBoth[D, T]:
+def solution(name: str, path: str, only: Literal[False] = ...) -> SolveBoth[D, T, U]:
     ...
 
 
@@ -44,7 +45,7 @@ def solution(name: str, path: str, only: Literal[True]) -> SolveOnly[D, T]:
     ...
 
 
-def solution(name: str, path: str, only: bool = ONLY) -> SolveAny[D, T]:
+def solution(name: str, path: str, only: bool = ONLY) -> SolveAny[D, T, U]:
     if only:
 
         def solve_only(parse: Parse[D], solve_only: Solve[D, T]) -> None:
@@ -68,7 +69,7 @@ def solution(name: str, path: str, only: bool = ONLY) -> SolveAny[D, T]:
     else:
 
         def solve_both(
-            parse: Parse[D], solve_part_one: Solve[D, T], solve_part_two: Solve[D, T]
+            parse: Parse[D], solve_part_one: Solve[D, T], solve_part_two: Solve[D, U]
         ) -> None:
             @entrypoint(name)
             def _() -> None:
